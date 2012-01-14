@@ -1,0 +1,43 @@
+# HTTP message structure
+# Start line defines HTTP verb to use
+# Headers (optional) provides additional info (e.g. message length, cookies, etc)
+  name:value
+  name:value
+# headers must end with a blank line
+# message body (optional) can contain any binary or text data
+
+# Verbs - type of request being made and therefore how the server will interpret it
+GET # ask server to return a representation of a resource
+POST # submit data to a web server
+PUT # create or update a representation of a resource on a server (similar to POST)
+DELETE # destroy a resource on a server
+PATCH # update a portion of a resource (unlike PUT which updates it wholesale)
+
+# Handling multiple routes that should respond the same way
+  require 'sinatra'
+
+  ['/one', '/two', '/three'].each do |route|
+    get route do
+      "Triggered #{route} via GET"
+    end
+  
+    post route do
+      "Triggered #{route} via POST"
+    end
+  end
+
+note: you can make trailing slash optional with '/one/?'
+
+# Remember that the first sufficient match wins, so define the order of your routes carefully (sinatra uses greedy match)
+
+# Halting requests (error handling)
+  get '/halt' do
+    'You will not see this output'
+    halt 500
+  end
+
+# Static files
+# Sinatra assumes the public folder exists, so you should ommmit it from the route
+  get '/prog/mypage.html' # will return the html page in public/prog/ folder
+
+
