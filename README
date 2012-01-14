@@ -40,4 +40,35 @@ note: you can make trailing slash optional with '/one/?'
 # Sinatra assumes the public folder exists, so you should ommmit it from the route
   get '/prog/mypage.html' # will return the html page in public/prog/ folder
 
+# Views - by default Sinatra will look in the views subfolder
+  get '/index' do
+    erb :index # will render views/index.erb
+  end
+
+# to reference views in subfolders, we need to convert the string representation of the path to a symbol
+  get '/:user/:profile' do
+    erb '/user/profile'.to_sym #will render /views/user/profile.erb
+    # alternative is erb :'/user/profile'
+  end
+
+# passing data into views - use instance varaiables!
+  get 'home' do
+    @name = 'Random User'
+    erb :home
+  end
+
+  # in the body of the html file...
+  <h1>Hello, <%= @name %>!</h1>
+
+  # use <%= %> to evaluate statements (display instance variables, perform operations)
+  # use <% %> for control statements (loops, etc...)
+
+# Filters - modify requests and responses, both before and after a route has been executed
+  before do
+    # do stuff here
+  end
+
+  # you can set a URL to match and the filter will only be applied for that route. Otherwise it will always apply.
+  before('/index') {...} # executed only before the '/index' route
+
 
